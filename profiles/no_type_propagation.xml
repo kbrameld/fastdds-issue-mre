@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Fast DDS default participant profile used by the system tests (set through FASTDDS_DEFAULT_PROFILES_FILE).
+
+  Disables type propagation: endpoints are announced without type information, so participants never use the
+  TypeLookup service. In Fast DDS 3.6.x the TypeLookup reply writer history is capped at 1000 samples; when many
+  participants request many types at once (as happens when a launch file brings up a dozen nodes) replies are dropped
+  silently and the requester never retries, so the endpoints of those types are never discovered. The symptom is a test
+  that waits forever for a service (or a node that never finishes starting up) in roughly 1 out of 10 runs.
+  ROS 2 does not need type discovery, as every node has its message types compiled in.
+-->
+<profiles xmlns="http://www.eprosima.com/XMLSchemas/fastRTPS_Profiles">
+  <participant profile_name="no_type_propagation" is_default_profile="true">
+    <rtps>
+      <propertiesPolicy>
+        <properties>
+          <property>
+            <name>fastdds.type_propagation</name>
+            <value>disabled</value>
+          </property>
+        </properties>
+      </propertiesPolicy>
+    </rtps>
+  </participant>
+</profiles>

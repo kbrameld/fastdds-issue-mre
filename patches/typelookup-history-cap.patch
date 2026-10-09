@@ -1,0 +1,13 @@
+diff --git a/src/cpp/fastdds/builtin/type_lookup_service/TypeLookupManager.cpp b/src/cpp/fastdds/builtin/type_lookup_service/TypeLookupManager.cpp
+index 23f38dc2b..ec4b8edbf 100644
+--- a/src/cpp/fastdds/builtin/type_lookup_service/TypeLookupManager.cpp
++++ b/src/cpp/fastdds/builtin/type_lookup_service/TypeLookupManager.cpp
+@@ -553,7 +553,7 @@ bool TypeLookupManager::create_endpoints()
+     // Built-in history attributes.
+     HistoryAttributes hatt;
+     hatt.initialReservedCaches = 20;
+-    hatt.maximumReservedCaches = 1000;
++    hatt.maximumReservedCaches = 100000;
+     hatt.payloadMaxSize = TypeLookupManager::typelookup_data_max_size;
+ 
+     WriterAttributes watt = participant_->pdp()->create_builtin_writer_attributes();

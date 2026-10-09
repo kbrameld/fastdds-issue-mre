@@ -1,0 +1,30 @@
+# docker compose run --rm bug         Fast DDS as shipped with ROS 2 Lyrical: clients get stuck
+# docker compose run --rm workaround  same libraries, one setting changed: no stuck clients
+# docker compose run --rm fix         Fast DDS v3.6.2 + one-line patch (built from source, ~10 min the first time)
+# docker compose run --rm diagnose    Fast DDS v3.6.2 + logging patch: shows the messages that are silently dropped
+services:
+  bug:
+    image: fastdds-mre:stock
+    build: { context: ., target: stock }
+
+  workaround:
+    image: fastdds-mre:stock
+    build: { context: ., target: stock }
+    environment:
+      FASTDDS_DEFAULT_PROFILES_FILE: /mre/profiles/no_type_propagation.xml
+
+  fix:
+    image: fastdds-mre:fix
+    build:
+      context: .
+      target: custom
+      args: { PATCHES: patches/typelookup-history-cap.patch }
+
+  diagnose:
+    image: fastdds-mre:diagnose
+    build:
+      context: .
+      target: custom
+      args: { PATCHES: patches/log-failed-sends.patch }
+    environment:
+      MRE_DIAG: "1"
